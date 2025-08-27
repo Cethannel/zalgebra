@@ -321,6 +321,12 @@ pub fn GenericVector(comptime dimensions: comptime_int, comptime T: type) type {
             return length(first_vector.sub(second_vector));
         }
 
+        /// Return the distance squared between two points.
+        /// [(x1 - x2)^2 + (y1 - y2)^2 + (z1 - z2)^2 ...]
+        pub fn distanceSq(first_vector: Self, second_vector: Self) T {
+            return lengthSq(first_vector.sub(second_vector));
+        }
+
         /// Construct new normalized vector from a given one.
         pub fn norm(self: Self) Self {
             const l = self.length();
@@ -649,6 +655,38 @@ test "zalgebra.Vectors.distance" {
 
         try expectEqual(a.distance(b), 1);
         try expectEqual(a.distance(c), 5);
+    }
+}
+
+test "zalgebra.Vectors.distance2" {
+    // Vec2
+    {
+        const a = Vec2.zero();
+        const b = Vec2.left();
+        const c = Vec2.new(0, 5);
+
+        try expectEqual(a.distanceSq(b), 1 * 1);
+        try expectEqual(a.distanceSq(c), 5 * 5);
+    }
+
+    // Vec3
+    {
+        const a = Vec3.zero();
+        const b = Vec3.left();
+        const c = Vec3.new(0, 5, 0);
+
+        try expectEqual(a.distanceSq(b), 1 * 1);
+        try expectEqual(a.distanceSq(c), 5 * 5);
+    }
+
+    // Vec4
+    {
+        const a = Vec4.zero();
+        const b = Vec4.left();
+        const c = Vec4.new(0, 5, 0, 0);
+
+        try expectEqual(a.distanceSq(b), 1 * 1);
+        try expectEqual(a.distanceSq(c), 5 * 5);
     }
 }
 
